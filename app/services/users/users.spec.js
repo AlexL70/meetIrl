@@ -30,6 +30,9 @@ describe('Users factory', function() {
             twitter: 'dabill'
         }
     ];
+    var singleUser = userList[1];
+
+
 
     beforeEach(angular.mock.module('api.users'));
 
@@ -47,6 +50,14 @@ describe('Users factory', function() {
         });
         it('should return hard-coded list of users', function() {
             expect(Users.all()).toEqual(userList);
+        });
+    });
+    describe('.findById', function() {
+        it('should exist', function() {
+            expect(Users.findById).toBeDefined();
+        });
+        it('should return one user object if it exists', function() {
+            expect(Users.findById('2')).toEqual(singleUser);
         });
     });
 });

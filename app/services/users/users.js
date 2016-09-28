@@ -39,6 +39,11 @@
             all: function() {
                 //  Returns hardcoded list of users. Eventually it would be an API call.
                 return userList;
+            },
+            findById: function(id) {
+                return userList.find(function(user){
+                    return user.id === id;
+                });
             }
         };
 
