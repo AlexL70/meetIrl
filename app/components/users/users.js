@@ -13,7 +13,9 @@
                 });
         });
 
-    function UsersController() {
+    function UsersController(Users) {
         var vm = this;
+
+        vm.users = Users.all();
     }
 })();
