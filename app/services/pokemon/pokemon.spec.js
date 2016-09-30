@@ -15,6 +15,10 @@ describe('Pokemon factory', function() {
             type: { name: 'electric' }
         }]
     };
+    //  Mock Pokemon API bad response
+    var RESPONSE_ERROR = {
+        detail: 'Not found.'
+    };
 
     //  Load API module
     beforeEach(angular.mock.module('api.pokemon'));
@@ -65,6 +69,29 @@ describe('Pokemon factory', function() {
             expect(result.name).toEqual('pikachu');
             expect(result.sprites.front_default).toContain('.png');
             expect(result.types[0].type.name).toEqual('electric');
+        });
+
+        it('should return a 404 when called with invalid name', function() {
+            //  Set bad name
+            var search = 'godzilla';
+
+            //  Update status code and response object
+            //$httpBackend.whenGET(API + search).respond(404, $q.reject(RESPONSE_ERROR));
+            //  Original option with 404 param does not work for some reason (AlexL70)
+            $httpBackend.whenGET(API + search).respond($q.reject(RESPONSE_ERROR));
+
+            expect(Pokemon.findByName).not.toHaveBeenCalled();
+            expect(result).toEqual({});
+
+            //  Update chained method to catch
+            Pokemon.findByName(search)
+                .catch(function(res) {
+                    result = res;
+                });
+            $httpBackend.flush();
+
+            expect(Pokemon.findByName).toHaveBeenCalledWith(search);
+            expect(result.detail).toEqual('Not found.');
         });
     });
 });
